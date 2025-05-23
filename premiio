@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ybarra - Canjea tu premio</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('fondo.png') repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    #sliderContainer {
+      position: relative;
+      width: 80%;
+      max-width: 400px;
+      height: 60px;
+      background-color: #ddd;
+      border-radius: 30px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    #sliderBtn {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 50px;
+      height: 50px;
+      background: url('boton.png') no-repeat center/contain;
+      border-radius: 50%;
+      cursor: grab;
+      z-index: 10;
+    }
+
+    #popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      max-width: 400px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      display: none;
+      text-align: center;
+    }
+
+    #popup h2 {
+      margin-top: 10px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    #popup p {
+      color: #666;
+    }
+
+    .popup-btn {
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4db6ac;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #canjeado {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: url('fondo.png') repeat;
+    }
+
+    #canjeado h1 {
+      color: #0c2340;
+      font-size: 28px;
+    }
+  </style>
+</head>
+<body>
+  <img src="logo.png" alt="Logo Ybarra" style="max-width: 150px;">
+
+  <div id="sliderContainer">
+    <div id="sliderBtn"></div>
+  </div>
+
+  <div id="popup">
+    <img src="info_icon.png" alt="Info" style="width: 60px;">
+    <h2>Canjear premio</h2>
+    <p>¿Seguro que quieres canjear tu premio?</p>
+    <button class="popup-btn" onclick="cancelar()">Cancelar</button>
+    <button class="popup-btn" onclick="confirmar()">Confirmar</button>
+  </div>
+
+  <div id="canjeado">
+    <img src="logo.png" alt="Logo Ybarra" style="max-width: 150px;">
+    <h1>TU PREMIO HA SIDO CANJEADO</h1>
+  </div>
+
+  <script>
+    const btn = document.getElementById('sliderBtn');
+    const popup = document.getElementById('popup');
+    const slider = document.getElementById('sliderContainer');
+    const canjeado = document.getElementById('canjeado');
+
+    let isDragging = false;
+    let startX;
+
+    btn.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX - btn.offsetLeft;
+      btn.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      btn.style.cursor = 'grab';
+      if (btn.offsetLeft > slider.offsetWidth - btn.offsetWidth - 10) {
+        popup.style.display = 'block';
+      } else {
+        btn.style.left = '5px';
+      }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        let newX = e.clientX - startX;
+        newX = Math.max(5, Math.min(newX, slider.offsetWidth - btn.offsetWidth - 5));
+        btn.style.left = newX + 'px';
+      }
+    });
+
+    function cancelar() {
+      popup.style.display = 'none';
+      btn.style.left = '5px';
+    }
+
+    function confirmar() {
+      popup.style.display = 'none';
+      document.body.innerHTML = document.getElementById('canjeado').outerHTML;
+      document.getElementById('canjeado').style.display = 'flex';
+    }
+  </script>
+</body>
+</html>
