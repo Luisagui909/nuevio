@@ -159,6 +159,47 @@
       document.body.innerHTML = document.getElementById('canjeado').outerHTML;
       document.getElementById('canjeado').style.display = 'flex';
     }
+    btn.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    startX = e.touches[0].clientX - btn.offsetLeft;
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => {
+    if (isDragging) endDrag();
+  });
+
+  document.addEventListener('touchmove', (e) => {
+    if (isDragging) {
+      moveSlider(e.touches[0].clientX);
+    }
+  }, { passive: false });
+
+  function moveSlider(clientX) {
+    let newX = clientX - startX;
+    newX = Math.max(5, Math.min(newX, slider.offsetWidth - btn.offsetWidth - 5));
+    btn.style.left = newX + 'px';
+  }
+
+  function endDrag() {
+    isDragging = false;
+    btn.style.cursor = 'grab';
+    if (btn.offsetLeft > slider.offsetWidth - btn.offsetWidth - 10) {
+      popup.style.display = 'block';
+    } else {
+      btn.style.left = '5px';
+    }
+  }
+
+  function cancelar() {
+    popup.style.display = 'none';
+    btn.style.left = '5px';
+  }
+
+  function confirmar() {
+    popup.style.display = 'none';
+    document.body.innerHTML = document.getElementById('canjeado').outerHTML;
+    document.getElementById('canjeado').style.display = 'flex';
+  }
   </script>
 </body>
 </html>
